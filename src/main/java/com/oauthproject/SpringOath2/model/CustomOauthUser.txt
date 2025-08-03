@@ -1,0 +1,120 @@
+package com.oauthproject.SpringOath2.model;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+
+public class CustomOauthUser implements OAuth2User, OidcUser {
+
+    private OAuth2User oAuth2User;
+    private OidcIdToken oidcIdToken;
+    private OidcUserInfo oidcUserInfo;
+
+    private String id;
+    private String email;
+    private String name;
+    private String firstName;
+    private String lastName;
+    private String provider;
+
+    public CustomOauthUser(
+            OAuth2User oAuth2User,
+            String id,
+            String email,
+            String name,
+            String firstName,
+            String lastName,
+            String provider
+    ) {
+        this(oAuth2User, id, email, name, firstName, lastName, provider, null, null);
+    }
+
+    public CustomOauthUser(
+            OAuth2User oAuth2User,
+            String id,
+            String email,
+            String name,
+            String firstName,
+            String lastName,
+            String provider,
+            OidcIdToken oidcIdToken,
+            OidcUserInfo oidcUserInfo
+    ) {
+        this.oAuth2User = oAuth2User;
+        this.oidcIdToken = oidcIdToken;
+        this.oidcUserInfo = oidcUserInfo;
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.provider = provider;
+    }
+
+    public CustomOauthUser(String email, String id, String name) {
+        this.email = email;
+        this.id = id;
+        this.name = name;
+
+    }
+
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return oAuth2User.getAttributes();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return oAuth2User.getAuthorities();
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public String getFirstName() {
+        return this.firstName;
+    }
+
+    public String getLastName() {
+        return this.lastName;
+    }
+
+    public String getProvider() {
+        return this.provider;
+    }
+
+    // --- OIDC-specific overrides ---
+
+    @Override
+    public Map<String, Object> getClaims() {
+        return oidcIdToken != null ? oidcIdToken.getClaims() : Collections.emptyMap();
+    }
+
+    @Override
+    public OidcUserInfo getUserInfo() {
+        return oidcUserInfo;
+    }
+
+    @Override
+    public OidcIdToken getIdToken() {
+        return oidcIdToken;
+    }
+
+}

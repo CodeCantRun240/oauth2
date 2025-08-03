@@ -1,0 +1,8 @@
+facebook login portal
+http://localhost:8081/oauth2/authorization/facebook
+
+google login portal
+http://localhost:8081/oauth2/authorization/google
+
+logout
+http://localhost:8081/logout
