@@ -61,7 +61,7 @@ public class SecurityConfig {
                 )
                 //
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/login")
+                        .logoutSuccessUrl("http://localhost:3000")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .deleteCookies("JSESSIONID")
