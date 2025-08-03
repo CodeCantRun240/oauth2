@@ -1,9 +1,0 @@
-/home/nope7avi240/Intellij/auth/src/main/java/com/oauthproject/SpringOath2/SpringOath2Application.java
-/home/nope7avi240/Intellij/auth/src/main/java/com/oauthproject/SpringOath2/configuration/JacksonConfig.java
-/home/nope7avi240/Intellij/auth/src/main/java/com/oauthproject/SpringOath2/controller/GoogleInfoController.java
-/home/nope7avi240/Intellij/auth/src/main/java/com/oauthproject/SpringOath2/controller/HomeController.java
-/home/nope7avi240/Intellij/auth/src/main/java/com/oauthproject/SpringOath2/mapping/CustomUser.java
-/home/nope7avi240/Intellij/auth/src/main/java/com/oauthproject/SpringOath2/security/CustomAuthorizationRequestResolver.java
-/home/nope7avi240/Intellij/auth/src/main/java/com/oauthproject/SpringOath2/security/CustomSuccessHandler.java
-/home/nope7avi240/Intellij/auth/src/main/java/com/oauthproject/SpringOath2/security/SecurityConfig.java
-/home/nope7avi240/Intellij/auth/src/main/java/com/oauthproject/SpringOath2/service/CustomOauth2Service.java
