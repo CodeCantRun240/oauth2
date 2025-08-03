@@ -11,4 +11,4 @@ COPY target/*.jar oauthApp.jar
 EXPOSE 8081
 
 # Command to run the app
-ENTRYPOINT ["java", "-jar", "oauthApp.jar"]
+ENTRYPOINT ["java", "-jar", "SpringOath2-0.0.1-SNAPSHOT.jar"]
