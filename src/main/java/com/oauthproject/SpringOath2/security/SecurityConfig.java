@@ -3,6 +3,7 @@ package com.oauthproject.SpringOath2.security;
 import com.oauthproject.SpringOath2.service.CustomOauth2Service;
 
 import com.oauthproject.SpringOath2.service.CustomOidcService;
+import com.oauthproject.SpringOath2.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,10 +35,20 @@ public class SecurityConfig {
     private CustomSuccessHandler customSuccessHandler;
 
     @Autowired
-    private JwtAuthFilter jwtAuthFilter;
+    private JwtCookieAuthFilter jwtCookieAuthFilter;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    public JwtCookieAuthFilter jwtCookieAuthFilter(JwtUtil jwtUtil) {
+        return new JwtCookieAuthFilter(jwtUtil); // <-- Ensure JwtCookieAuthFilter is a @Component or Bean
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, ClientRegistrationRepository repo) throws Exception {
+
+        JwtCookieAuthFilter jwtCookieAuthFilter = new JwtCookieAuthFilter(jwtUtil);
+
         CustomAuthorizationRequestResolver resolver =
                 new CustomAuthorizationRequestResolver(repo, "/oauth2/authorization");
         http
@@ -64,13 +75,13 @@ public class SecurityConfig {
                         .logoutSuccessUrl("http://localhost:3000")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
-                        .deleteCookies("JSESSIONID")
+                        .deleteCookies("jwtToken")
+
 
                  )
 
-//                .requiresChannel(channel -> channel
-//                        .anyRequest().requiresSecure())
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+
+                .addFilterBefore(jwtCookieAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 ;
 
         return http.build();
