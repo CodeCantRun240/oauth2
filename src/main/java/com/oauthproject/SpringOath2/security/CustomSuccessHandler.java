@@ -52,11 +52,14 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         jwtCookie.setSecure(true); // Ensure HTTPS in production
         jwtCookie.setPath("/");
         jwtCookie.setMaxAge(3600);
+
         response.addCookie(jwtCookie);
 
         // Manually add SameSite=None attribute
-        String headerValue = String.format("%s=%s; Max-Age=%d; Path=/; Secure; HttpOnly; SameSite=None",
-                jwtCookie.getName(), jwtCookie.getValue(), jwtCookie.getMaxAge());
+        String cookieHeader = String.format(
+                "jwtToken=%s; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=%d",
+                jwtToken, 3600
+        );
 
 
         // Redirect to frontend cleanly (no JWT in URL)

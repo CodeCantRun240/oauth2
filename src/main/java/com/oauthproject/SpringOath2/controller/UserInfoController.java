@@ -1,6 +1,5 @@
 package com.oauthproject.SpringOath2.controller;
 
-import com.oauthproject.SpringOath2.dto.AuthResponseDTO;
 import com.oauthproject.SpringOath2.dto.UserDTO;
 import com.oauthproject.SpringOath2.mapping.UserMapping;
 import com.oauthproject.SpringOath2.model.CustomOauthUser;
@@ -14,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
