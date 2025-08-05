@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizationContext;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -17,6 +19,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,19 +50,16 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         System.out.println("LOGIN SUCCESS: " + oauthUser.getEmail() + " via " + oauthUser.getProvider());
 
 // Set JWT as HttpOnly Cookie
-        Cookie jwtCookie = new Cookie("jwtToken", jwtToken);
-        jwtCookie.setHttpOnly(true);
-        jwtCookie.setSecure(true); // Ensure HTTPS in production
-        jwtCookie.setPath("/");
-        jwtCookie.setMaxAge(3600);
+        ResponseCookie cookie = ResponseCookie.from("jwtToken", jwtToken)
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("None")
+                .path("/")
+                .maxAge(Duration.ofHours(1))
+                .build();
 
-        response.addCookie(jwtCookie);
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
-        // Manually add SameSite=None attribute
-        String cookieHeader = String.format(
-                "jwtToken=%s; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=%d",
-                jwtToken, 3600
-        );
 
 
         // Redirect to frontend cleanly (no JWT in URL)
