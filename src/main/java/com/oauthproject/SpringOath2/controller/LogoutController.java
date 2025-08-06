@@ -1,9 +1,12 @@
 package com.oauthproject.SpringOath2.controller;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -22,18 +25,41 @@ public class LogoutController {
     @Autowired
     private OAuth2AuthorizedClientService authorizedClientService;
 
+    @Value("${frontend.url}")
+    private String frontendUrl;
+
+//    @GetMapping(ApiPaths.LOGOUT)
+//    public String logout(HttpServletRequest request, HttpServletResponse response) {
+//        // Clear Spring Security context
+//        SecurityContextHolder.clearContext();
+//
+//        // Invalidate session
+//        HttpSession session = request.getSession(false);
+//        if (session != null) {
+//            session.invalidate();
+//        }
+//
+//
+//        // Redirect to your login page
+//        return "redirect:" + ApiPaths.LOGIN;
+//    }
+
     @GetMapping(ApiPaths.LOGOUT)
-    public String logout(HttpServletRequest request, HttpServletResponse response) {
-        // Clear Spring Security context
-        SecurityContextHolder.clearContext();
+    public String logout(HttpServletRequest request, HttpServletResponse response) throws IOException  {
 
-        // Invalidate session
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
+        Cookie cookie = new Cookie("jwtToken", null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true); // Ensure HTTPS in production
+        cookie.setMaxAge(0); // Delete cookie
+        response.addCookie(cookie);
 
-        // Redirect to your login page
-        return "redirect:" + ApiPaths.LOGIN;
+        System.out.println("User logged out, JWT cookie deleted.");
+
+        // Optionally redirect frontend after logout
+        String redirectUrl = frontendUrl;
+
+        response.sendRedirect(redirectUrl);
+        return null;
     }
 }

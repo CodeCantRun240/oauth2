@@ -20,8 +20,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
+
 
 @Component
 public class CustomSuccessHandler implements AuthenticationSuccessHandler {
