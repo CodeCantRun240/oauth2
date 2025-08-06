@@ -4,9 +4,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
 public class UrlResolve {
-    private static final String FRONTEND_URL = "http://localhost:4040";
 
     public static String resolveFrontendUrl(HttpServletRequest request) {
+        String DEFAULT_FRONTEND_URL = "http://localhost:4040";
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie c : cookies) {
@@ -15,7 +15,7 @@ public class UrlResolve {
                 }
             }
         }
-        return FRONTEND_URL;
+        return DEFAULT_FRONTEND_URL;
     }
 
 }
