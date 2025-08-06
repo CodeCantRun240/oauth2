@@ -1,5 +1,6 @@
 package com.oauthproject.SpringOath2.controller;
 
+import com.oauthproject.SpringOath2.util.UrlResolve;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,8 +26,7 @@ public class LogoutController {
     @Autowired
     private OAuth2AuthorizedClientService authorizedClientService;
 
-    @Value("${frontend.url}")
-    private String frontendUrl;
+
 
 //    @GetMapping(ApiPaths.LOGOUT)
 //    public String logout(HttpServletRequest request, HttpServletResponse response) {
@@ -46,6 +46,8 @@ public class LogoutController {
 
     @GetMapping(ApiPaths.LOGOUT)
     public String logout(HttpServletRequest request, HttpServletResponse response) throws IOException  {
+
+        String frontendUrl = UrlResolve.resolveFrontendUrl(request);
 
         Cookie cookie = new Cookie("jwtToken", null);
         cookie.setPath("/");

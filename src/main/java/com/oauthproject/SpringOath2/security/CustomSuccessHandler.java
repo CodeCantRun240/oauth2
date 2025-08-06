@@ -2,6 +2,7 @@ package com.oauthproject.SpringOath2.security;
 
 import com.oauthproject.SpringOath2.model.CustomOauthUser;
 import com.oauthproject.SpringOath2.util.JwtUtil;
+import com.oauthproject.SpringOath2.util.UrlResolve;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -46,16 +47,8 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
-        Cookie[] cookies = request.getCookies();
-        String frontendUrl = "http://localhost:4040"; // fallback
-        if (cookies != null) {
-            for (Cookie c : cookies) {
-                if ("frontendUrl".equals(c.getName())) {
-                    frontendUrl = c.getValue();
-                    break;
-                }
-            }
-        }
+
+        String frontendUrl = UrlResolve.resolveFrontendUrl(request);
         response.sendRedirect(frontendUrl + "/auth/callback");
 
 
