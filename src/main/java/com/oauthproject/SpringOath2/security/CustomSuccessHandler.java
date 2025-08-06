@@ -1,6 +1,5 @@
 package com.oauthproject.SpringOath2.security;
 
-import com.oauthproject.SpringOath2.controller.ApiPaths;
 import com.oauthproject.SpringOath2.model.CustomOauthUser;
 import com.oauthproject.SpringOath2.util.JwtUtil;
 import jakarta.servlet.http.Cookie;
@@ -11,10 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.client.OAuth2AuthorizationContext;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -27,14 +22,6 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
     @Autowired
     private JwtUtil jwtUtil;
-
-
-    @Value("${frontend.url}")
-    private String frontendUrl;
-
-    public String getFrontendUrl() {
-        return frontendUrl;
-    }
 
     //private final String FRONTEND_REDIRECT_BASE = getFrontendUrl() + "/auth/callback?jwtToken=";
 
@@ -59,14 +46,18 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
-
-
-        // Redirect to frontend cleanly (no JWT in URL)
+        Cookie[] cookies = request.getCookies();
+        String frontendUrl = "http://localhost:4040"; // fallback
+        if (cookies != null) {
+            for (Cookie c : cookies) {
+                if ("frontendUrl".equals(c.getName())) {
+                    frontendUrl = c.getValue();
+                    break;
+                }
+            }
+        }
         response.sendRedirect(frontendUrl + "/auth/callback");
 
-
-        //String redirectUrl = FRONTEND_REDIRECT_BASE + jwtToken;
-        //response.sendRedirect(redirectUrl);
 
 
     }
