@@ -1,7 +1,6 @@
 package com.oauthproject.SpringOath2.security;
 
 
-import com.oauthproject.SpringOath2.util.UrlResolve;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,8 +11,12 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 
+
 @Component
 public class CustomFailureHandler implements AuthenticationFailureHandler {
+    @Value("${frontend.url}")
+    private String frontendUrl;
+
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request,
@@ -22,13 +25,9 @@ public class CustomFailureHandler implements AuthenticationFailureHandler {
 
         System.out.println("Authentication Failed: " + exception.getMessage());
 
-        // Resolve frontendUrl from cookies
-        String frontendUrl = UrlResolve.resolveFrontendUrl(request);
-
         // Redirect to frontend login page with error message
-        String redirectUrl = frontendUrl + "/login?error=" + exception.getMessage();
+        String redirectUrl = frontendUrl + exception.getMessage();
 
         response.sendRedirect(redirectUrl);
     }
 }
-
